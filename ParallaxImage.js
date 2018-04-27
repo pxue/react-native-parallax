@@ -5,6 +5,7 @@
 
 var isEqual = require('lodash/lang/isEqual');
 var React = require('react');
+var { Component } = React;
 var {
   View,
   Image,
@@ -13,60 +14,49 @@ var {
   Dimensions,
   TouchableHighlight,
 } = require('react-native');
+var PropTypes = require('prop-types');
 
 var WINDOW_HEIGHT = Dimensions.get('window').height;
 
-var ParallaxImage = React.createClass({
-  propTypes: {
-    onPress:        React.PropTypes.func,
-    scrollY:        React.PropTypes.object,
-    parallaxFactor: React.PropTypes.number,
-    imageStyle:     Image.propTypes.style,
-    overlayStyle:   View.propTypes.style,
-  },
+class ParallaxImage extends Component {
+  constructor(props) {
+    super(props);
 
-  getDefaultProps: function() {
-    return {
-      parallaxFactor: 0.2,
-    };
-  },
-
-  getInitialState: function() {
     this.isLayoutStale = true;
-    return {
+    this.state = {
       offset: 0,
       height: 0,
       width:  0,
     };
-  },
+  }
 
-  setNativeProps: function(nativeProps) {
+  setNativeProps(nativeProps) {
     this._container.setNativeProps(nativeProps);
-  },
+  }
 
   // Measure again since onLayout event won't pass the offset
-  handleLayout: function(event) {
+  handleLayout(event) {
     if(this.isLayoutStale) {
       (this._touchable || this._container).measure(this.handleMeasure);
     }
-  },
+  }
 
-  componentWillReceiveProps: function(nextProps) {
+  componentWillReceiveProps(nextProps) {
     if(!isEqual(nextProps, this.props)) {
       this.isLayoutStale = true;
     }
-  },
+  }
 
-  handleMeasure: function(ox, oy, width, height, px, py) {
+  handleMeasure(ox, oy, width, height, px, py) {
     this.isLayoutStale = false;
     this.setState({
       offset: py,
       height,
       width,
     });
-  },
+  }
 
-  render: function() {
+  render() {
     var { offset, width, height } = this.state;
     var {
       onPress,
@@ -126,7 +116,19 @@ var ParallaxImage = React.createClass({
     }
     return content;
   }
-});
+}
+
+ParallaxImage.defaultProps = {
+  parallaxFactor: 0.2,
+};
+
+ParallaxImage.propTypes = {
+  onPress:        PropTypes.func,
+  scrollY:        PropTypes.object,
+  parallaxFactor: PropTypes.number,
+  imageStyle:     Image.propTypes.style,
+  overlayStyle:   View.propTypes.style,
+}
 
 var styles = StyleSheet.create({
   container: {
