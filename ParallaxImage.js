@@ -128,8 +128,8 @@ ParallaxImage.propTypes = {
   onPress:        PropTypes.func,
   scrollY:        PropTypes.object,
   parallaxFactor: PropTypes.number,
-  imageStyle:     Image.propTypes.style,
-  overlayStyle:   View.propTypes.style,
+  imageStyle:     PropTypes.any,
+  overlayStyle:   PropTypes.any,
 }
 
 var styles = StyleSheet.create({
