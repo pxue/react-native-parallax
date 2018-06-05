@@ -5,6 +5,8 @@
 
 var isArray = require('lodash/lang/isArray');
 var React = require('react');
+var { Component } = React;
+var PropTypes = require('prop-types');
 var {
   Animated,
   ScrollView
@@ -31,28 +33,24 @@ var applyPropsToParallaxImages = function(children, props) {
 };
 
 
-var ParallaxScrollViewComposition = React.createClass({
-  propTypes: {
-    scrollViewComponent: React.PropTypes.func,
-  },
-
-  setNativeProps: function(nativeProps) {
+class ParallaxScrollViewComposition extends Component {
+  setNativeProps(nativeProps) {
     this._root.setNativeProps(nativeProps);
-  },
+  }
 
-  getScrollResponder: function() {
+  getScrollResponder() {
     return this._scrollComponent.getScrollResponder();
-  },
+  }
 
-  componentWillMount: function() {
+  componentWillMount() {
     var scrollY = new Animated.Value(0);
     this.setState({ scrollY });
     this.onParallaxScroll = Animated.event(
       [{nativeEvent: {contentOffset: {y: scrollY}}}]
     );
-  },
+  }
 
-  render: function() {
+  render() {
     var { ref, children, scrollViewComponent, onScroll, ...props } = this.props;
     var { scrollY } = this.state;
     var ScrollComponent = scrollViewComponent || ScrollView;
@@ -77,6 +75,10 @@ var ParallaxScrollViewComposition = React.createClass({
       </ScrollComponent>
     );
   }
-});
+}
+
+ParallaxScrollViewComposition.propTypes = {
+  scrollViewComponent: PropTypes.func,
+};
 
 module.exports = ParallaxScrollViewComposition;
