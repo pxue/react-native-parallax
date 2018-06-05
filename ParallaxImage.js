@@ -25,6 +25,7 @@ class ParallaxImage extends Component {
     this.isLayoutStale = true;
 
     this.handleLayout = this.handleLayout.bind(this);
+    this.handleMeasure = this.handleMeasure.bind(this);
     this.state = {
       offset: 0,
       height: 0,
